@@ -1,7 +1,7 @@
+# -*- coding: utf-8 -*-
 import requests
 import json
 from zipfile import ZipFile 
-
 
 the_working_year = 2020
 
@@ -12,7 +12,9 @@ while requests.head("https://data.jobtechdev.se/annonser/historiska/" + str(the_
     temp.write(response.content) 
 
     with ZipFile('data.zip', 'r') as zip:
-        print(zip.read(str(the_working_year) + ".jsonl"))
+        test = open("data.txt", 'wb')
+        test.write(zip.read(str(the_working_year) + ".jsonl"))
+        #print(zip.read(str(the_working_year) + ".jsonl"))
     
     the_working_year += 1
 
