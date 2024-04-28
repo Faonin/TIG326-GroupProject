@@ -5,6 +5,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 from nltk.corpus import stopwords
 import gensim
 from gensim.matutils import Sparse2Corpus
+import re
 
 nltk.download('stopwords')
 
@@ -18,9 +19,10 @@ with open("data/data.json", 'r', encoding="utf-8") as dataset:
     y = 0
     for i in dataset:
         i = json.loads(i)
-        data.append(i["description"]["text"])
+        for sentence in i["description"]["text"].split("."):
+            data.append(sentence)
         y += 1
-        if y == 1500:
+        if y == 150:
             break
 
 
@@ -36,12 +38,12 @@ corpus = Sparse2Corpus(x, documents_columns=False)
 # Create id to word dictionary
 id2word = {i: word for i, word in enumerate(feature_names)}
 
-lda_model = gensim.models.LdaModel(corpus=corpus, num_topics=125, id2word=id2word, passes=20, random_state=42)
+lda_model = gensim.models.LdaModel(corpus=corpus, num_topics=150, id2word=id2word, passes=5, random_state=42)
 
 
 theText = open("data/text.txt", 'a', encoding="utf-8")
 
 # Print the topics identified by LDA
-topics = lda_model.print_topics()
+topics = lda_model.print_topics(num_topics=150, num_words=25)
 for topic in topics:
-    theText.write(str(topic) + "\n")
+    theText.write(str(re.sub(r'\d*\.\d+|\d+', '', topic[1]).replace('*', '').replace('  ', '').replace('"', '').strip()) + "\n")
