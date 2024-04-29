@@ -50,8 +50,8 @@ print("Test accuracy:", accuracy)
 """
 
 
-with open("data/training.csv", "w") as fuck:
-    with open("data/text.txt") as IncomingInfo:
+with open("data/training.csv", "w", encoding="utf-8") as fuck:
+    with open("data/text.txt", encoding="utf-8") as IncomingInfo:
         for x in IncomingInfo:
-            for y in x.split("+"):
-                fuck.write(y + ", \n")
+            for y in list(set(x.split(" + "))):
+                fuck.write(y.strip("\n") + ",övrigt\n")
