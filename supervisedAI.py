@@ -50,8 +50,17 @@ print("Test accuracy:", accuracy)
 """
 
 
-with open("data/training.csv", "w", encoding="utf-8") as fuck:
-    with open("data/text.txt", encoding="utf-8") as IncomingInfo:
-        for x in IncomingInfo:
-            for y in list(set(x.split(" + "))):
-                fuck.write(y.strip("\n") + ",övrigt\n")
+unique_entries = set()
+
+# Read incoming info and gather unique entries
+with open("data/text.txt", encoding="utf-8") as incoming_info:
+    for line in incoming_info:
+        # Split line into phrases, remove duplicates in the line
+        phrases = set(line.strip().split(" + "))
+        # Add processed phrases to the set of unique entries
+        unique_entries.update(phrases)
+
+# Write all unique entries to the output file
+with open("data/training.csv", "w", encoding="utf-8") as output_file:
+    for entry in unique_entries:
+        output_file.write(f"{entry},övrigt\n")
