@@ -1,7 +1,7 @@
 import os
 import requests
 import json
-from zipfile import ZipFile 
+from zipfile import ZipFile
 
 the_working_year = 2022
 
