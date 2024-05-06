@@ -1,4 +1,3 @@
-"""
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
@@ -7,6 +6,22 @@ from keras.layers import Embedding, Flatten, Dense
 from keras.models import Sequential
 from preprocessing.text import Tokenizer
 from preprocessing.sequence import pad_sequences
+
+
+unique_entries = set()
+
+# Read incoming info and gather unique entries
+with open("data/text.txt", encoding="utf-8") as incoming_info:
+    for line in incoming_info:
+        # Split line into phrases, remove duplicates in the line
+        phrases = set(line.strip().split(" + "))
+        # Add processed phrases to the set of unique entries
+        unique_entries.update(phrases)
+
+# Write all unique entries to the output file
+with open("data/all_code_words.csv", "w", encoding="utf-8") as output_file:
+    for entry in unique_entries:
+        output_file.write(f"{entry},övrigt\n")
 
 
 # Load data
@@ -47,20 +62,3 @@ model.fit(X_train, y_train, epochs=10, validation_split=0.2)
 # Evaluate the model
 loss, accuracy = model.evaluate(X_test, y_test)
 print("Test accuracy:", accuracy)
-"""
-
-
-unique_entries = set()
-
-# Read incoming info and gather unique entries
-with open("data/text.txt", encoding="utf-8") as incoming_info:
-    for line in incoming_info:
-        # Split line into phrases, remove duplicates in the line
-        phrases = set(line.strip().split(" + "))
-        # Add processed phrases to the set of unique entries
-        unique_entries.update(phrases)
-
-# Write all unique entries to the output file
-with open("data/training.csv", "w", encoding="utf-8") as output_file:
-    for entry in unique_entries:
-        output_file.write(f"{entry},övrigt\n")
