@@ -1,4 +1,4 @@
+*.csv
 data.json
 text.txt
-predicted_data.csv
 vector*

@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
@@ -11,7 +12,7 @@ from tensorflow.keras.preprocessing.sequence import pad_sequences # type: ignore
 data = pd.read_csv('data/training.csv')  # Ensure you have a CSV file with 'Word' and 'Category'
 
 # Text preprocessing
-tokenizer = Tokenizer(num_words=10000)  # Adjust based on your vocabulary size
+tokenizer = Tokenizer(num_words=10000)  # Adjust based on your vocabulary ssize
 tokenizer.fit_on_texts(data['word'])
 sequences = tokenizer.texts_to_sequences(data['word'])
 
@@ -38,7 +39,7 @@ model.add(Dense(len(np.unique(y_train)), activation='softmax'))  # The output la
 model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
 # Train the model
-model.fit(X_train, y_train, epochs=20, validation_split=0.4)
+model.fit(X_train, y_train, epochs=50, validation_split=0.3)
 
 new_data_set = set()
 
@@ -60,6 +61,9 @@ predicted_categories = np.argmax(predictions, axis=1)
 predicted_category_names = label_encoder.inverse_transform(predicted_categories)
 
 with open("data/predicted_data.csv", "w", encoding="utf-8") as file:
-    file.write("Phrase, Predicted Category\n")
+    file.write("word,category\n")
     for phrase, category in zip(new_data_set, predicted_category_names):
-        file.write(f"{phrase},{category}\n")
+        if category != "övrigt":
+            file.write(f"{phrase},{category}\n")
+            
+#os.remove("data/text.txt")
