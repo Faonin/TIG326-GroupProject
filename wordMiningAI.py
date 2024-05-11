@@ -4,6 +4,7 @@ import numpy as np
 from sklearn.feature_extraction.text import CountVectorizer
 from nltk.corpus import stopwords
 import gensim
+from gensim.corpora import MmCorpus
 from gensim.matutils import Sparse2Corpus
 import re
 import os
@@ -16,7 +17,7 @@ keywords = ["kunskap i", "erfarenhet av", "skicklig på", "tränad i", "bekant m
             "expertise in", "qualified in", "capable of", "adept in", "accomplished in",
             "specialized in", "certified in", "efficient in", "skills", "skills in", "krav", "competencies"]
 
-num_of_work_categories = 3000
+num_of_work_categories = 300
 
 nltk.download('stopwords')
 
@@ -44,7 +45,7 @@ for row in data:
     if any(keyword in row for keyword in keywords):
         adjusted_data.append(row)
 
-vectorizer = CountVectorizer(stop_words=all_stopwords, token_pattern=r'\b[a-zA-ZåäöÅÄÖ]+\b', ngram_range=(1, 3))
+vectorizer = CountVectorizer(stop_words=all_stopwords, token_pattern=r'\b[a-zA-ZåäöÅÄÖ]+\b')
 
 vector_document = vectorizer.fit_transform(adjusted_data)
 
@@ -56,7 +57,7 @@ id2word = {i: word for i, word in enumerate(feature_names)}
 
 gensim.corpora.MmCorpus.serialize('./data/vector.mm', corpus)
 
-mm_corpus = gensim.corpora.MmCorpus('./data/vector.mm')
+mm_corpus = MmCorpus('./data/vector.mm')
 
 print("AI running please be patient it might take a few hours")
 
@@ -64,7 +65,7 @@ lda_model = gensim.models.LdaModel(corpus=mm_corpus, id2word=id2word, num_topics
 
 theText = open("data/text.txt", 'a', encoding="utf-8")
 
-topics = lda_model.print_topics(num_words=100, num_topics=num_of_work_categories)
+topics = lda_model.print_topics(num_words=1000, num_topics=num_of_work_categories)
 
 for topic in topics:
     theText.write(str(re.sub(r'\d*\.\d+|\d+', '', topic[1]).replace('*', '').replace('  ', '').replace('"', '').strip()) + "\n")

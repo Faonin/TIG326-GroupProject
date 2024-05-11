@@ -28,7 +28,7 @@ with open("data/updated_jsonData.jsonl", "w", encoding="utf-8") as tempFile:
 
             for technical in technicalSkills:
                 if jsonData["description"]["text"].count(" " + technical + " ") != 0:
-                    jsonData["soft_skills"].update({technical:jsonData["description"]["text"].count(" " + technical + " ")})
+                    jsonData["technical_skills"].update({technical:jsonData["description"]["text"].count(" " + technical + " ")})
             json.dump(jsonData, tempFile)
             tempFile.write("\n")
 
