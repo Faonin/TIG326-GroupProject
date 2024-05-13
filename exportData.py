@@ -35,10 +35,9 @@ ddf = dd.read_json("data/updated_jsonData.jsonl", encoding="utf-8", lines=True)
 
 ddf.to_csv("data/output_data.csv", encoding="utf-8", single_file=True, index=True)
 
-
-"""
 os.remove("data/updated_jsonData.jsonl")
 
+"""
 os.remove("data/data.json")
 os.remove("data/predicted_data.csv")
 """
