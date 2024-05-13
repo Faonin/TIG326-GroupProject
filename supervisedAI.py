@@ -31,15 +31,15 @@ X_train, X_test, y_train, y_test = train_test_split(padded_sequences, integer_en
 model = Sequential()
 model.add(Embedding(input_dim=10000, output_dim=100, input_length=max_length))  # Adjust embedding layer parameters as needed
 model.add(Flatten())
-model.add(Dense(100, activation='relu'))
-model.add(Dense(50, activation='relu'))
+model.add(Dense(256, activation='relu'))
+model.add(Dense(128, activation='relu'))
 model.add(Dense(len(np.unique(y_train)), activation='softmax'))  # The output layer nodes equal the number of categories
 
 # Compile the model
-model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+model.compile(optimizer='Adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
 
 # Train the model
-model.fit(X_train, y_train, epochs=50, validation_split=0.3)
+model.fit(X_train, y_train, epochs=20, validation_split=0.4)
 
 new_data_set = set()
 

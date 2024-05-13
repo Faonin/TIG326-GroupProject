@@ -15,6 +15,7 @@ while requests.head("https://data.jobtechdev.se/annonser/historiska/" + str(the_
         unzipedfile = open("data/data.jsonl", 'wb')
         unzipedfile.write(zip.read(str(the_working_year) + ".jsonl"))
     
+
     with open("data/data.jsonl", 'r', encoding="utf-8") as bigFile:
 
         gbg = open("data/data.json", 'a', encoding="utf-8")
@@ -22,7 +23,7 @@ while requests.head("https://data.jobtechdev.se/annonser/historiska/" + str(the_
             json_line = json.loads(line)
             try:
                 if(json_line["workplace_address"]["region"] == "Västra Götalands län" and "Null" not in json_line.keys()):
-                    json.dump(json_line, gbg)
+                    json.dump(json_line, gbg, ensure_ascii=False)
                     gbg.write("\n")
             except:
                 pass
