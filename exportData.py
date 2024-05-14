@@ -2,7 +2,7 @@ import json
 import csv
 import dask.dataframe as dd
 import os
-"""
+
 softSkills = []
 technicalSkills = []
 
@@ -28,14 +28,24 @@ with open("data/updated_jsonData.jsonl", "w", encoding="utf-8") as tempFile:
             for technical in technicalSkills:
                 if jsonData["description"]["text"].count(" " + technical + " ") != 0:
                     jsonData["technical_skills"].update({technical:jsonData["description"]["text"].count(" " + technical + " ")})
-            json.dump(jsonData, tempFile, ensure_ascii=False)
-            tempFile.write("\n")
-"""
-ddf = dd.read_json("data/updated_jsonData.jsonl", encoding="utf-8", lines=True)
 
-ddf.to_csv("data/output_data.csv", encoding="utf-8", single_file=True, index=True)
+            try:
+                jsonData["occupation_field"] = jsonData["occupation_field"]["label"]
+                jsonData["occupation_group"] = jsonData["occupation_group"]["label"]
+                jsonData["occupation"] = jsonData["occupation"]["label"]
+                jsonData["salary_type"] = jsonData["salary_type"]["label"]
+                jsonData["working_hours_type"] = jsonData["working_hours_type"]["label"]
+                jsonData["description"] = jsonData["description"]["text"]
 
-os.remove("data/updated_jsonData.jsonl")
+                jsonData.pop("external_id")
+                jsonData.pop("webpage_url")
+                jsonData.pop("logo_url")
+
+                json.dump(jsonData, tempFile, ensure_ascii=False)
+                tempFile.write("\n")
+            except:
+                pass
+
 
 """
 os.remove("data/data.json")
